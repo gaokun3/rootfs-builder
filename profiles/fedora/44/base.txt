@@ -1,0 +1,16 @@
+# Fedora 44 minimal base (groups + packages, dnf syntax)
+@core
+@standard
+
+glibc-all-langpacks
+langpacks-core-*
+
+# boot/initrd tooling used later by image-builder
+systemd-boot-unsigned
+dracut
+
+# audio / hardware basics
+alsa-ucm
+alsa-utils
+i2c-tools
+pipewire-utils

@@ -1,0 +1,77 @@
+name: rootfs matrix
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      release:
+        description: create GitHub releases with the rootfs tarballs
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          shellcheck -x build.sh lib/*.sh
+
+  build:
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { distro: fedora, release: "44",      desktop: gnome }
+          - { distro: fedora, release: "44",      desktop: kde }
+          - { distro: ubuntu, release: "24.04.4", desktop: gnome }
+          - { distro: ubuntu, release: "24.04.4", desktop: kde }
+          - { distro: ubuntu, release: "26.04",   desktop: gnome }
+          - { distro: ubuntu, release: "26.04",   desktop: kde }
+          - { distro: debian, release: trixie,    desktop: gnome }
+          - { distro: debian, release: trixie,    desktop: kde }
+          - { distro: debian, release: sid,       desktop: gnome }
+          - { distro: debian, release: sid,       desktop: kde }
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build rootfs
+        run: |
+          ./build.sh \
+            --distro "${{ matrix.distro }}" \
+            --release "${{ matrix.release }}" \
+            --desktop "${{ matrix.desktop }}"
+
+      - name: Upload rootfs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-${{ matrix.distro }}-${{ matrix.release }}-${{ matrix.desktop }}
+          path: |
+            out/*.tar.zst
+            out/*.sha256
+            out/*.manifest.json
+            out/*.packages.txt
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Release
+        if: github.event_name == 'workflow_dispatch' && inputs.release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="rootfs-${{ matrix.distro }}-${{ matrix.release }}-${{ matrix.desktop }}-$(date -u +%Y%m%d)"
+          gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
+            --title "$tag" \
+            --notes "rootfs built from $GITHUB_SHA; see manifest for inputs" \
+            out/*.tar.zst out/*.sha256 out/*.manifest.json out/*.packages.txt || \
+          gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber \
+            out/*.tar.zst out/*.sha256 out/*.manifest.json out/*.packages.txt

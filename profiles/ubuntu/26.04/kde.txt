@@ -1,0 +1,17 @@
+# Ubuntu KDE: trimmed Plasma set (no LibreOffice, games or PIM suite)
+kde-plasma-desktop
+plasma-workspace-wayland
+plasma-nm
+bluedevil
+systemsettings
+xdg-desktop-portal-kde
+dolphin
+konsole
+
+# firefox comes from the Mozilla apt repo (pinned in bootstrap-ubuntu.sh)
+firefox
+
+fonts-noto-cjk
+fonts-noto-color-emoji
+mpv
+v4l-utils

@@ -1,0 +1,30 @@
+# Fedora 44 KDE Plasma desktop profile (explicit component list; the
+# display manager is selected at build time: Plasma Login Manager when
+# available in the official repos, SDDM otherwise)
+plasma-workspace
+plasma-workspace-wayland
+kwin-wayland
+plasma-nm
+plasma-systemsettings
+plasma-desktop
+bluedevil
+pipewire
+wireplumber
+xdg-desktop-portal-kde
+dolphin
+konsole
+firefox
+
+# fonts and look&feel basics
+google-noto-sans-fonts
+google-noto-serif-fonts
+google-noto-sans-mono-fonts
+google-noto-color-emoji-fonts
+google-noto-sans-cjk-fonts
+breeze-icon-theme
+
+vim
+nano
+git
+htop
+fastfetch

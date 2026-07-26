@@ -1,0 +1,22 @@
+# Packages excluded from the Fedora rootfs (dnf --exclude globs).
+# Also used as a post-build assert-absent list.
+gnome-boxes
+gnome-connections
+snapshot
+gnome-weather
+gnome-contacts
+gnome-maps
+simple-scan
+gnome-clocks
+gnome-calculator
+gnome-calendar
+toolbox
+unoconv
+mediawriter
+
+# no generic firmware: gaokun3-firmware provides exactly what the
+# device needs
+linux-firmware
+linux-firmware-*
+*-firmware
+*-firmware-*

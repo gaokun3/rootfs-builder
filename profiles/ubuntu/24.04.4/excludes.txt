@@ -1,0 +1,8 @@
+# apt pin -1 during build + assert-absent afterwards
+linux-firmware
+libreoffice-core
+thunderbird
+kmail
+kontact
+korganizer
+akregator

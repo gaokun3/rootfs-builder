@@ -1,0 +1,18 @@
+# Fedora 44 GNOME desktop profile
+@gnome-desktop
+@workstation-product
+
+fcitx5-chinese-addons
+gnome-tweaks
+gnome-extensions-app
+firefox
+mpv
+v4l-utils
+vim
+nano
+ripgrep
+git
+htop
+fastfetch
+screen
+telnet

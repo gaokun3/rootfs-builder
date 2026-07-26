@@ -1,0 +1,10 @@
+# Debian GNOME: core desktop without office/games/PIM
+gnome-core
+gnome-initial-setup
+network-manager-gnome
+
+firefox-esr
+fonts-noto-cjk
+fonts-noto-color-emoji
+mpv
+v4l-utils

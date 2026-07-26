@@ -1,0 +1,11 @@
+# Ubuntu GNOME: official minimal desktop set
+ubuntu-desktop-minimal
+gnome-initial-setup
+
+# firefox comes from the Mozilla apt repo (pinned in bootstrap-ubuntu.sh)
+firefox
+
+fonts-noto-cjk
+fonts-noto-color-emoji
+mpv
+v4l-utils

@@ -1,0 +1,25 @@
+# Debian minimal base (installed after mmdebstrap --variant=important)
+locales
+sudo
+ca-certificates
+curl
+wget
+less
+file
+
+# boot/initrd tooling used later by image-builder
+initramfs-tools
+kmod
+systemd-boot
+systemd-boot-efi
+
+# audio / hardware basics
+alsa-ucm-conf
+alsa-utils
+i2c-tools
+pipewire-audio
+
+vim
+nano
+git
+htop
