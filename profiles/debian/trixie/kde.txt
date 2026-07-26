@@ -1,6 +1,5 @@
 # Debian KDE: trimmed Plasma set (no LibreOffice, games or PIM suite)
 kde-plasma-desktop
-plasma-workspace-wayland
 plasma-nm
 bluedevil
 systemsettings

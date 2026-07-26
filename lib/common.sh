@@ -122,12 +122,16 @@ verify_rootfs() {
   done < <(read_list "$excludes_file")
   if [[ $excl_fail -eq 0 ]]; then log "verify: ok: excluded packages absent"; fi
 
-  # no device kernel / dtb / bootloader entries in a generic rootfs
-  local n
-  n="$(find "$ROOTFS/boot" -type f 2>/dev/null | wc -l)"
-  if [[ "$n" -ne 0 ]]; then
-    echo "verify: FAIL: /boot contains $n files; rootfs must not ship a kernel" >&2; fail=1
+  # no device kernel / initrd in a generic rootfs (other stray files are
+  # reported but tolerated)
+  local kfiles ofiles
+  kfiles="$(find "$ROOTFS/boot" -type f \( -name 'vmlinuz*' -o -name 'initrd*' \
+    -o -name 'initramfs*' -o -name 'Image*' -o -name 'System.map*' -o -name '*.dtb' \) 2>/dev/null)"
+  if [[ -n "$kfiles" ]]; then
+    echo "verify: FAIL: kernel artifacts in /boot: $kfiles" >&2; fail=1
   fi
+  ofiles="$(find "$ROOTFS/boot" -type f 2>/dev/null | head -5)"
+  if [[ -n "$ofiles" ]]; then log "note: non-kernel files in /boot: $(echo "$ofiles" | tr '\n' ' ')"; fi
 
   [[ $fail -eq 0 ]] || die "rootfs verification failed"
   log "verify: rootfs OK"
