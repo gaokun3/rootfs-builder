@@ -85,7 +85,7 @@ verify_rootfs() {
     log "verify: ok: display-manager -> $dm"
   fi
   local other
-  for other in gdm gdm3 sddm plasma-login-manager lightdm; do
+  for other in gdm gdm3 sddm plasmalogin plasma-login-manager lightdm; do
     [[ "$other" == "$dm" ]] && continue
     if [[ "$(in_chroot systemctl is-enabled "$other.service" 2>/dev/null || true)" == "enabled" ]]; then
       echo "verify: FAIL: second display manager enabled: $other" >&2; fail=1

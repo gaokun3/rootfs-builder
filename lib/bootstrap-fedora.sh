@@ -33,7 +33,7 @@ if [[ "$DESKTOP" == "kde" ]]; then
   if dnf -q --releasever="$RELEASE" --forcearch=aarch64 --use-host-config \
        repoquery plasma-login-manager kde-settings-plasmalogin 2>/dev/null |
      grep -q plasma-login-manager; then
-    DM=plasma-login-manager
+    DM=plasmalogin   # unit name shipped by the plasma-login-manager package
     dm_pkgs=(plasma-login-manager kde-settings-plasmalogin)
   else
     DM=sddm

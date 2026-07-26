@@ -90,7 +90,7 @@ log "installing ${#desktop_pkgs[@]} desktop packages"
 in_chroot apt-get install -y "${desktop_pkgs[@]}" "${dm_pkgs[@]}"
 
 if [[ "$DESKTOP" == "kde" ]]; then
-  DM="$(find_unit plasma-login-manager sddm)" || die "no display manager unit found"
+  DM="$(find_unit plasmalogin plasma-login-manager sddm)" || die "no display manager unit found"
 else
   FIRST_BOOT=gnome-initial-setup
   DM="$(find_unit gdm3 gdm)" || die "no gdm unit found"
