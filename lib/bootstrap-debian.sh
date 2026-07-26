@@ -90,7 +90,10 @@ in_chroot apt-get clean
 rm -f "$ROOTFS/etc/resolv.conf"
 
 pkg_installed() {
-  dpkg-query --admindir="$ROOTFS/var/lib/dpkg" -W "$1" >/dev/null 2>&1
+  # -W alone also matches known-but-not-installed packages; check the
+  # actual dpkg status
+  dpkg-query --admindir="$ROOTFS/var/lib/dpkg" -W \
+    -f '${db:Status-Status}\n' "$1" 2>/dev/null | grep -qx installed
 }
 write_package_inventory() {
   dpkg-query --admindir="$ROOTFS/var/lib/dpkg" -W \

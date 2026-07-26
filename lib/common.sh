@@ -114,13 +114,13 @@ verify_rootfs() {
   fi
 
   # excluded packages absent
-  local pat
+  local pat excl_fail=0
   while IFS= read -r pat; do
     if pkg_installed "$pat"; then
-      echo "verify: FAIL: excluded package present: $pat" >&2; fail=1
+      echo "verify: FAIL: excluded package present: $pat" >&2; fail=1; excl_fail=1
     fi
   done < <(read_list "$excludes_file")
-  log "verify: ok: excluded packages absent"
+  if [[ $excl_fail -eq 0 ]]; then log "verify: ok: excluded packages absent"; fi
 
   # no device kernel / dtb / bootloader entries in a generic rootfs
   local n
