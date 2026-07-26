@@ -14,3 +14,6 @@ alsa-ucm
 alsa-utils
 i2c-tools
 pipewire-utils
+
+# remote access
+openssh-server

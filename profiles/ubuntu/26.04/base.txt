@@ -20,6 +20,9 @@ alsa-utils
 i2c-tools
 pipewire-audio
 
+# remote access
+openssh-server
+
 vim
 nano
 git

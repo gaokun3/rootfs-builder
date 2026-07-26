@@ -50,6 +50,11 @@ postprocess_rootfs() {
 
   in_chroot systemctl enable NetworkManager.service
   in_chroot systemctl set-default graphical.target
+  # policy-rc.d (Debian/Ubuntu) blocks postinst-driven enablement, so this
+  # has to be explicit rather than relying on the package's own preset
+  local ssh_unit
+  ssh_unit="$(find_unit ssh sshd)" || die "no ssh/sshd unit found (openssh-server missing from base.txt?)"
+  in_chroot systemctl enable "$ssh_unit.service"
   # deterministic single display manager
   in_chroot systemctl enable "$dm.service"
   local unit_dir=/usr/lib/systemd/system
@@ -104,6 +109,15 @@ verify_rootfs() {
     log "verify: ok: default target graphical"
   else
     echo "verify: FAIL: default.target -> '$deftarget'" >&2; fail=1
+  fi
+
+  # ssh/sshd enabled (remote access on every image)
+  local ssh_unit
+  if ssh_unit="$(find_unit ssh sshd)" &&
+     [[ "$(in_chroot systemctl is-enabled "$ssh_unit.service" 2>/dev/null)" == "enabled" ]]; then
+    log "verify: ok: $ssh_unit enabled"
+  else
+    echo "verify: FAIL: ssh/sshd not enabled" >&2; fail=1
   fi
 
   # machine-id cleared
