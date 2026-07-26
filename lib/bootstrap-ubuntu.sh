@@ -50,8 +50,10 @@ printf 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000\n' \
 # chroot setup
 mount -t proc proc "$ROOTFS/proc"
 mount -t sysfs sys "$ROOTFS/sys"
-mount --bind /dev "$ROOTFS/dev"
-mount --bind /dev/pts "$ROOTFS/dev/pts"
+# --rbind + rslave: container /dev has submounts (null, pts, ...) that a
+# plain --bind would not carry, leaving a broken /dev in the chroot
+mount --rbind /dev "$ROOTFS/dev"
+mount --make-rslave "$ROOTFS/dev"
 mount -t tmpfs tmpfs "$ROOTFS/run"
 rm -f "$ROOTFS/etc/resolv.conf"
 cp /etc/resolv.conf "$ROOTFS/etc/resolv.conf"
@@ -59,7 +61,7 @@ printf '#!/bin/sh\nexit 101\n' > "$ROOTFS/usr/sbin/policy-rc.d"
 chmod 755 "$ROOTFS/usr/sbin/policy-rc.d"
 cleanup_chroot() {
   rm -f "$ROOTFS/usr/sbin/policy-rc.d"
-  umount -l "$ROOTFS/dev/pts" "$ROOTFS/dev" "$ROOTFS/proc" "$ROOTFS/sys" "$ROOTFS/run" 2>/dev/null || true
+  umount -l "$ROOTFS/dev" "$ROOTFS/proc" "$ROOTFS/sys" "$ROOTFS/run" 2>/dev/null || true
 }
 trap cleanup_chroot EXIT
 
